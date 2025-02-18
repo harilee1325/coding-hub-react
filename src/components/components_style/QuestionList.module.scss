@@ -1,0 +1,79 @@
+
+.container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.heading {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.noQuestions {
+  text-align: center;
+  font-size: 1rem;
+  color: #aaaaaa;
+  padding: 10px;
+  border: 1px dashed #555;
+  border-radius: 6px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.questionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background-color: #252525;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #333;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
+  }
+}
+
+.title {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Difficulty labels */
+.difficulty {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Color-coded difficulty badges */
+.easy {
+  background-color: #81c784; /* Green */
+  color: #fff;
+}
+
+.medium {
+  background-color: #ffb74d; /* Orange */
+  color: #000;
+}
+
+.hard {
+  background-color: #e57373; /* Red */
+  color: #fff;
+}
