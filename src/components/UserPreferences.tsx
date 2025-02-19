@@ -1,4 +1,4 @@
-import { Badge, HStack, Stack } from "@chakra-ui/react";
+import { Badge, HStack } from "@chakra-ui/react";
 import { HiAtSymbol, HiStar } from "react-icons/hi"
 
 const UserPreferences = ({ defaultLanguage, defaultDifficulty }: { defaultLanguage: string, defaultDifficulty: string }) => {

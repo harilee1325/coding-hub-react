@@ -37,3 +37,9 @@ export interface ProgrammingLanguage {
     code_snippet: string;
     id: string;
 }   
+export interface ExecuteCodeResult {
+    run: {
+        stderr: string;
+        output: string;
+    };
+}

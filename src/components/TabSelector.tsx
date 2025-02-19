@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Tabs, Tab, TabPanels, TabPanel, TabList, Box } from "@chakra-ui/react";
 
 interface TabSelectorProps {
@@ -31,7 +31,7 @@ const TabSelector: React.FC<TabSelectorProps> = ({
                 </TabList>
                 <TabPanels>
                     {/* If you don't need content in the panels, you can leave them empty */}
-                    {categories.map((cat, i) => (
+                    {categories.map((i) => (
                         <TabPanel key={i} p={4}>
                             {/* Optionally, you could display something like "Showing {cat} problems" */}
                         </TabPanel>

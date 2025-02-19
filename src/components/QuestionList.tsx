@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './components_style/QuestionList.module.scss';
 import { Problem } from '../utils/types';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, Button, Card, CardBody, CardFooter, Text } from "@chakra-ui/react"
+import { Card, CardBody } from "@chakra-ui/react"
 
 interface QuestionListProps {
     problems: Problem[];

@@ -18,10 +18,10 @@ import {
 import { FiTruck } from "react-icons/fi"; // Some icons for show/hide
 import pb from "../services/pocketbase";
 import CodeEditor from "../components/CodeEditor";
-import { Problem } from "../utils/types";
+import { ExecuteCodeResult, Problem } from "../utils/types";
 import { executeCode } from "../services/piston";
 import OutputWindow from "../components/OutputWindow";
-import { HiAtSymbol, HiStar } from "react-icons/hi"
+import { HiStar } from "react-icons/hi"
 
 const QuestionDetail: React.FC = () => {
     const { id, language, version } = useParams<{ id: string; language: string; version: string }>();
@@ -63,7 +63,11 @@ const QuestionDetail: React.FC = () => {
         const fetchDifficulty = async () => {
             if (!problem?.difficulty) return;
             try {
-                const diffRecord = await pb.collection("difficulties").getOne(problem.difficulty);
+                const difficultyId =
+                    typeof problem.difficulty === "string"
+                        ? problem.difficulty
+                        : problem.difficulty.id;
+                const diffRecord = await pb.collection("difficulties").getOne(difficultyId);
                 setDifficulty(diffRecord.name);
             } catch (error) {
                 console.error("Error fetching difficulty:", error);
@@ -80,7 +84,14 @@ const QuestionDetail: React.FC = () => {
             setOutput(null);
 
             // Example: calling your "executeCode" service
-            const { run: result } = await executeCode(language || "javascript", version || "18.15.0", code);
+            const response = await executeCode(
+                language || "javascript",
+                version || "18.15.0",
+                code
+            ) as ExecuteCodeResult;
+
+            const { run: result } = response;
+
             if (result.stderr) {
                 setIsError(true);
             }
@@ -135,7 +146,7 @@ const QuestionDetail: React.FC = () => {
                                     <Badge w="100px" paddingStart="10px" paddingEnd="10px"
                                         paddingTop="3px" paddingBottom="3px" borderRadius="5px" variant="solid" colorScheme="green">
                                         <HiStar />
-                                        {problem.difficulty.name || "Easy"}
+                                        {difficulty || "Easy"}
                                     </Badge>
                                 </Stack>
                                 <Box
@@ -179,7 +190,6 @@ const QuestionDetail: React.FC = () => {
 
                     <CodeEditor
                         language={language || "javascript"}
-                        version={version || "18.15.0"}
                         defaultCode={code}
                         onCodeChange={(newCode) => setCode(newCode)}
                     />

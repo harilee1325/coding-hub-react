@@ -4,15 +4,13 @@ import { Editor } from "@monaco-editor/react";
 
 interface CodeEditorProps {
     language: string;
-    version: string;
     defaultCode: string;
     onCodeChange: (code: string) => void;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
     language,
-    version,
-    defaultCode,    
+    defaultCode,
     onCodeChange,
 }) => {
     const [code, setCode] = useState<string>(defaultCode);
