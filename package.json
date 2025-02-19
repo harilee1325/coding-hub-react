@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "start": "npx serve -s dist -l ${PORT:-3000}",
+    "start": "npx serve -s dist -l ${PORT:-8080}",
     "preview": "vite preview"
   },
   "dependencies": {
