@@ -114,7 +114,7 @@ const QuestionDetail: React.FC = () => {
     }
 
     if (!problem) {
-        return <Text color="red.500" p={4}>Question not found.</Text>;
+        return <Text color="red.500" p={4}></Text>;
     }
 
     return (

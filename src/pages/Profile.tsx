@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import pb from "../services/pocketbase";
 import useDropdownOptions from "../hooks/useDropdownOptions";
+import Navbar from "../components/Navbar";
 
 const Profile: React.FC = () => {
     const { user, setUser } = useAuth();
@@ -93,35 +94,39 @@ const Profile: React.FC = () => {
     };
 
     return (
-        <Box maxW="md" mx="auto" mt={10} p={5} borderWidth="1px" borderRadius="md">
-            <VStack spacing={4}>
-                <Text fontSize="2xl" fontWeight="bold">Profile Settings</Text>
+        <div>
+            <Navbar />
+            <Box maxW="md" mx="auto" mt={10} p={5} borderWidth="1px" borderRadius="md">
+                <VStack spacing={4}>
+                    <Text fontSize="2xl" fontWeight="bold">Profile Settings</Text>
 
-                <Select value={languageId} onChange={(e) => setLanguageId(e.target.value)}>
-                    {languages.map((lang) => (
-                        <option key={lang.id} value={lang.id}>
-                            {lang.name}
-                        </option>
-                    ))}
-                </Select>
+                    <Select value={languageId} onChange={(e) => setLanguageId(e.target.value)}>
+                        {languages.map((lang) => (
+                            <option key={lang.id} value={lang.id}>
+                                {lang.name}
+                            </option>
+                        ))}
+                    </Select>
 
-                <Select value={difficultyId} onChange={(e) => setDifficultyId(e.target.value)}>
-                    {difficulties.map((diff) => (
-                        <option key={diff.id} value={diff.id}>
-                            {diff.name}
-                        </option>
-                    ))}
-                </Select>
+                    <Select value={difficultyId} onChange={(e) => setDifficultyId(e.target.value)}>
+                        {difficulties.map((diff) => (
+                            <option key={diff.id} value={diff.id}>
+                                {diff.name}
+                            </option>
+                        ))}
+                    </Select>
 
-                <Button colorScheme="blue" onClick={handleSave}>
-                    Save Preferences
-                </Button>
+                    <Button colorScheme="blue" onClick={handleSave}>
+                        Save Preferences
+                    </Button>
 
-                <Button colorScheme="red" onClick={handleLogout}>
-                    Logout
-                </Button>
-            </VStack>
-        </Box>
+                    <Button colorScheme="red" onClick={handleLogout}>
+                        Logout
+                    </Button>
+                </VStack>
+            </Box>
+        </div>
+
     );
 };
 

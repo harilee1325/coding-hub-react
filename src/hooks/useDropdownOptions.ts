@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import pb from '../services/pocketbase';
-import { Problem, Difficulty, Category, ProgrammingLanguage } from '../utils/types';
+import { Problem, Difficulty, Category, ProgrammingLanguage, Theory } from '../utils/types';
 const useDropdownOptions = () => {
     const [languages, setLanguages] = useState<ProgrammingLanguage[]>([]);
     const [difficulties, setDifficulties] = useState<Difficulty[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [problems, setProblems] = useState<Problem[]>([]);
+    const [theories, setTheories] = useState<Theory[]>([]);
     useEffect(() => {
         const fetchOptions = async (collectionName: string) => {
             try {
                 const response = await pb.collection(collectionName).getFullList({
-                    sort: collectionName === 'problems' ? 'title' : 'name',
-                    expand: 'language,difficulty,category'
+                    sort: collectionName === 'problems' || collectionName === 'theory' ? 'title' : 'name',
+                    expand: 'language,difficulty,category,theory'
                 });
                 console.log(`${collectionName} response:`, response);
                 return response;
@@ -31,6 +32,7 @@ const useDropdownOptions = () => {
             const diffOptions = await fetchOptions('difficulties');
             const catOptions = await fetchOptions('categories');
             const problemOptions = await fetchOptions('problems');
+            const theoryOptions = await fetchOptions('theory'); 
 
             setLanguages(langOptions.map(lang => ({ id: lang.id, name: lang.name, version: lang.version, code_snippet: lang.code_snippet })));
             setDifficulties(diffOptions.map(diff => ({ id: diff.id, name: diff.name })));
@@ -53,6 +55,13 @@ const useDropdownOptions = () => {
                 updated: problem.updated || problem.created,
                 code: problem.code
             })));
+            setTheories(theoryOptions.map(theory => ({
+                id: theory.id,
+                title: theory.title,
+                content: theory.content,
+                language: theory.language,
+                category: theory.category
+            })));
             setLoading(false);
 
         };
@@ -60,7 +69,7 @@ const useDropdownOptions = () => {
         fetchData();
     }, []);
 
-    return { languages, difficulties, categories, problems, loading };
+    return { languages, difficulties, categories, problems, theories, loading };
 };
 
 export default useDropdownOptions;

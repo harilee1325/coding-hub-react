@@ -36,7 +36,16 @@ export interface ProgrammingLanguage {
     version: string;
     code_snippet: string;
     id: string;
-}   
+}
+
+export interface Theory {
+    title: string;
+    content: string;
+    language: string;
+    category: string;
+    id: string;
+}
+
 export interface ExecuteCodeResult {
     run: {
         stderr: string;

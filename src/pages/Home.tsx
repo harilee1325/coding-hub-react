@@ -5,12 +5,13 @@ import UserPreferences from '../components/UserPreferences';
 import TabSelector from '../components/TabSelector';
 import QuestionList from '../components/QuestionList';
 import useDropdownOptions from '../hooks/useDropdownOptions';
-import { Problem } from '../utils/types';
+import { Problem, Theory } from '../utils/types';
 import { useAuth } from '../context/AuthContext';
+import TheoryField from '../components/TheoryField';
 
 
 const Home: React.FC = () => {
-  const { languages, difficulties, categories, problems, loading } = useDropdownOptions();
+  const { languages, difficulties, categories, problems, theories, loading } = useDropdownOptions();
   const { user } = useAuth();
 
   // Use user's stored preferences if available; fallback to first option otherwise.
@@ -34,7 +35,7 @@ const Home: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategoryName);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(initialCategoryId);
   const [filteredProblems, setFilteredProblems] = useState<Problem[]>([]);
-
+  const [selectedTheory, setSelectedTheory] = useState<Theory | null>(null);
   // Filter problems based on language, difficulty, and selected category.
   useEffect(() => {
     const filtered = problems.filter(problem => {
@@ -49,6 +50,7 @@ const Home: React.FC = () => {
       return matchesLanguage && matchesDifficulty && matchesCategory;
     });
     setFilteredProblems(filtered);
+
   }, [defaultLanguageId, defaultDifficultyId, selectedCategoryId, problems]);
 
   useEffect(() => {
@@ -62,8 +64,23 @@ const Home: React.FC = () => {
       const matchesCategory =
         !initialCategoryId || (problem.category && problem.category.id === initialCategoryId);
       return matchesLanguage && matchesDifficulty && matchesCategory;
+
     });
     setFilteredProblems(filtered);
+
+    const filteredTheories = theories.filter(theory => {
+      const matchesLanguage =
+        !defaultLanguageId || (theory.language === defaultLanguageId);
+
+      const matchesCategory =
+        !initialCategoryId || (theory.category === initialCategoryId);
+      return matchesLanguage && matchesCategory;
+    });
+    filteredTheories.map(theory => {
+      if (theory.category === initialCategoryId) {
+        setSelectedTheory(theory);
+      }
+    })
   }, [categories]);
 
   if (loading) {
@@ -97,9 +114,16 @@ const Home: React.FC = () => {
           onSelectCategory={(categoryName: string) => {
             setSelectedCategory(categoryName);
             const selectedCat = categories.find((cat) => cat.name === categoryName);
+            const selectedTheory = theories.find((theory) => theory.category === selectedCat?.id && theory.language === defaultLanguageId);
             setSelectedCategoryId(selectedCat ? selectedCat.id : "");
+            setSelectedTheory(selectedTheory ? selectedTheory : null);
           }}
         />
+        {selectedTheory && (
+          <TheoryField
+            theory={selectedTheory}
+          />
+        )}
         <QuestionList
           problems={filteredProblems}
           language={defaultLanguage}
