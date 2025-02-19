@@ -14,18 +14,18 @@ const Signup: React.FC = () => {
     // Use dynamic options for language and difficulty:
     const [preferredLanguageId, setPreferredLanguageId] = useState<string>("");
     const [preferredDifficultyId, setPreferredDifficultyId] = useState<string>("");
-    const [preferredLanguageName, setPreferredLanguageName] = useState<string>("");
-    const [preferredDifficultyName, setPreferredDifficultyName] = useState<string>("");
+    //const [preferredLanguageName, setPreferredLanguageName] = useState<string>("");
+    //const [preferredDifficultyName, setPreferredDifficultyName] = useState<string>("");
 
     // Set defaults once the options are loaded:
     useEffect(() => {
         if (languages.length > 0) {
             setPreferredLanguageId(languages[0].id);
-            setPreferredLanguageName(languages[0].name);
+            // setPreferredLanguageName(languages[0].name);
         }
         if (difficulties.length > 0) {
             setPreferredDifficultyId(difficulties[0].id);
-            setPreferredDifficultyName(difficulties[0].name);
+            //setPreferredDifficultyName(difficulties[0].name);
         }
     }, [languages, difficulties]);
 
@@ -34,7 +34,7 @@ const Signup: React.FC = () => {
             const selectedLanguage = languages.find(l => l.id === preferredLanguageId);
             const selectedDifficulty = difficulties.find(d => d.id === preferredDifficultyId);
 
-            const newUser = await pb.collection("users").create({
+            await pb.collection("users").create({
                 email,
                 password,
                 passwordConfirm: password,
@@ -85,8 +85,8 @@ const Signup: React.FC = () => {
                     onChange={(e) => {
                         const selectedId = e.target.value;
                         setPreferredLanguageId(selectedId);
-                        const selectedLang = languages.find(l => l.id === selectedId);
-                        setPreferredLanguageName(selectedLang ? selectedLang.name : "");
+                        //const selectedLang = languages.find(l => l.id === selectedId);
+                        //setPreferredLanguageName(selectedLang ? selectedLang.name : "");
                     }}
                 >
                     {languages.map((lang) => (
@@ -101,8 +101,8 @@ const Signup: React.FC = () => {
                     onChange={(e) => {
                         const selectedId = e.target.value;
                         setPreferredDifficultyId(selectedId);
-                        const selectedDiff = difficulties.find(d => d.id === selectedId);
-                        setPreferredDifficultyName(selectedDiff ? selectedDiff.name : "");
+                        // const selectedDiff = difficulties.find(d => d.id === selectedId);
+                        // setPreferredDifficultyName(selectedDiff ? selectedDiff.name : "");
                     }}
                 >
                     {difficulties.map((diff) => (

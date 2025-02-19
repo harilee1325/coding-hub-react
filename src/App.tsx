@@ -5,7 +5,6 @@ import About from "./pages/About";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import QuestionDetail from "./pages/QuestionDetail";
 

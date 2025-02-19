@@ -2,8 +2,6 @@ import { Box, HStack, Text } from "@chakra-ui/react";
 import { Editor } from "@monaco-editor/react";
 import { useRef, useEffect, useState } from "react";
 import Output from "./Output";
-import useLocalStorage from "../hooks/useLocalStorage";
-
 interface CodeEditorProps {
     language: string;
     version: string;

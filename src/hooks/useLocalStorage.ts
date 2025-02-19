@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
     // Initialize state from localStorage if available, otherwise use initialValue

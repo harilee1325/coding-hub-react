@@ -21,7 +21,9 @@ const QuestionList: React.FC<QuestionListProps> = ({ problems, language, version
     return (
         <div className={styles.container}>
             <h2 className={styles.heading}>Available Questions</h2>
-            {problems.length === 0 ? (
+            {loading ? (
+                <p className={styles.noQuestions}>Loading questions...</p>
+            ) : problems.length === 0 ? (
                 <p className={styles.noQuestions}>No questions available for this selection.</p>
             ) : (
                 <ul className={styles.list}>

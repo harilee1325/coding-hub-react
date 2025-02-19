@@ -28,21 +28,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     useEffect(() => {
         // Manually load authentication data from localStorage.
-        // Check the key that PocketBase uses to store auth data.
-        const storedAuth = localStorage.getItem("pocketbase_auth"); // Change this key if necessary.
+        // Adjust the key if your auth data is stored under a different key.
+        const storedAuth = localStorage.getItem("pocketbase_auth");
         if (storedAuth) {
             try {
                 const authData = JSON.parse(storedAuth);
-                // Assign the token and model to authStore.
-                pb.authStore.token = authData.token;
-                pb.authStore.model = authData.model;
+                // Instead of assigning to read-only properties, use the save() method.
+                // This sets both the token and the model.
+                if (authData.token && authData.model) {
+                    pb.authStore.save(authData.token, authData.model);
+                }
             } catch (error) {
                 console.error("Error parsing stored auth data:", error);
             }
         }
 
-        // If we have a valid token, fetch the user profile.
-        if (pb.authStore.isValid) {
+        // If we have a valid token and a model, fetch the user profile.
+        if (pb.authStore.isValid && pb.authStore.model) {
             pb.collection("users")
                 .getOne(pb.authStore.model.id)
                 .then((record) => {
