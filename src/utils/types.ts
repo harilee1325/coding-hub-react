@@ -16,7 +16,7 @@ export interface Problem {
 
 export interface TestCase {
     input: string;
-    output: string;
+    expectedOutput: string;
     explanation?: string;
 }
 

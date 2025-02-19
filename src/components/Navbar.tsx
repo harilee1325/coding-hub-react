@@ -27,7 +27,7 @@ const NavLinkItem: React.FC<{ to: string; children: React.ReactNode }> = ({
             padding: "8px 16px",
             borderRadius: "4px",
             textDecoration: "none",
-            color: isActive ? "#fff" : "#333",
+            color: isActive ? "#fff" : "#fff",
             backgroundColor: isActive ? "#3f51b5" : "transparent",
         })}
     >

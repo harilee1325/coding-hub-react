@@ -8,9 +8,9 @@
 }
 
 .heading {
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: 700;
+  text-align: start;
+  font-size: 1.5rem;
+  font-weight: 500;
   color: #ffffff;
   margin-bottom: 15px;
 }
@@ -33,16 +33,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 18px;
-  background-color: #252525;
+  padding: 8px 18px;
+  background-color: #242a4f;
   margin-bottom: 12px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    background-color: #333;
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    background-color: #30386b;
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.2);
     transform: scale(1.02);
   }
 }
@@ -55,9 +55,9 @@
 
 /* Difficulty labels */
 .difficulty {
-  padding: 6px 12px;
+  padding: 4px 12px;
   border-radius: 6px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: bold;
   text-transform: uppercase;
 }
