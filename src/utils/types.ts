@@ -52,3 +52,11 @@ export interface ExecuteCodeResult {
         output: string;
     };
 }
+
+export interface Section {
+    name: string;
+    id: string;
+    priority: number;
+    categories: Category[];
+}
+
