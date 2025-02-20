@@ -61,4 +61,3 @@ export interface Section {
     categories: Category[];
 }
 
-export const api_key_ai = "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"
