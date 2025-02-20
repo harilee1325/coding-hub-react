@@ -4,7 +4,7 @@ import { HiAtSymbol, HiStar } from "react-icons/hi"
 const UserPreferences = ({ defaultLanguage, defaultDifficulty }: { defaultLanguage: string, defaultDifficulty: string }) => {
     return (
 
-        <HStack align="flex-start">
+        <HStack marginLeft='3%' align="flex-start">
             <Badge w="100px" padding="5px" borderRadius="5px" variant="solid" colorScheme="purple">
                 <HiStar />
                 {defaultLanguage}

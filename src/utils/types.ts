@@ -29,6 +29,7 @@ export interface Difficulty {
 export interface Category {
     name: string;
     id: string;
+    priority: number;
 }
 
 export interface ProgrammingLanguage {
@@ -52,3 +53,12 @@ export interface ExecuteCodeResult {
         output: string;
     };
 }
+
+export interface Section {
+    name: string;
+    id: string;
+    priority: number;
+    categories: Category[];
+}
+
+export const api_key_ai = "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"

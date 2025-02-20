@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, useColorModeValue, Spinner } from '@chakra-ui/react';
 import Navbar from "../components/Navbar";
 import UserPreferences from '../components/UserPreferences';
 import TabSelector from '../components/TabSelector';
-import QuestionList from '../components/QuestionList';
 import useDropdownOptions from '../hooks/useDropdownOptions';
-import { Problem, Theory } from '../utils/types';
 import { useAuth } from '../context/AuthContext';
-import TheoryField from '../components/TheoryField';
-
+import useFilteredProblems from '../hooks/useFilteredProblems';
+import useFilteredTheories from '../hooks/useFilteredTheories';
+import ContentTabs from '../components/ContentTabs';
+import SectionTab from '../components/SectionTab';
+import { Section } from '../utils/types';
+import useFilteredCategories from '../hooks/useFilteredCategories';
 
 const Home: React.FC = () => {
-  const { languages, difficulties, categories, problems, theories, loading } = useDropdownOptions();
+  const { languages, difficulties, categories, problems, theories, sections, loading } = useDropdownOptions();
   const { user } = useAuth();
 
   // Use user's stored preferences if available; fallback to first option otherwise.
@@ -23,65 +25,46 @@ const Home: React.FC = () => {
       ? languages[0].version
       : '';
 
-
   const defaultDifficulty = user?.preferredDifficultyName || (difficulties.length ? difficulties[0].name : '');
   const defaultDifficultyId = user?.preferredDifficultyId || (difficulties.length ? difficulties[0].id : '');
 
   // For categories, we allow selection via a TabSelector.
-  console.log("categories", categories);
   const initialCategoryName = categories.length ? categories[0].name : '';
   const initialCategoryId = categories.length ? categories[0].id : '';
 
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategoryName);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(initialCategoryId);
-  const [filteredProblems, setFilteredProblems] = useState<Problem[]>([]);
-  const [selectedTheory, setSelectedTheory] = useState<Theory | null>(null);
-  // Filter problems based on language, difficulty, and selected category.
+  const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+
+  // Use hooks for filtering problems and theories
+  const filteredProblems = useFilteredProblems({
+    problems,
+    defaultLanguageId,
+    defaultDifficultyId,
+    selectedCategoryId,
+  });
+
+  const filteredTheories = useFilteredTheories({
+    theories,
+    defaultLanguageId,
+    initialCategoryId,
+    selectedCategoryId,
+  });
+
+  const filteredCategories = useFilteredCategories({
+    categories,
+    selectedSection: selectedSection || sections[0],
+  });
+
   useEffect(() => {
-    const filtered = problems.filter(problem => {
-      const matchesLanguage =
-        !defaultLanguageId || (problem.language && problem.language.id === defaultLanguageId);
+    if (filteredCategories.length > 0) {
+      setSelectedCategory(filteredCategories[0].name);
+      setSelectedCategoryId(filteredCategories[0].id);
+    }
+  }, [filteredCategories]);
 
-      const matchesDifficulty =
-        !defaultDifficultyId || (problem.difficulty && problem.difficulty.id === defaultDifficultyId);
-
-      const matchesCategory =
-        !selectedCategoryId || (problem.category && problem.category.id === selectedCategoryId);
-      return matchesLanguage && matchesDifficulty && matchesCategory;
-    });
-    setFilteredProblems(filtered);
-
-  }, [defaultLanguageId, defaultDifficultyId, selectedCategoryId, problems]);
-
-  useEffect(() => {
-    const filtered = problems.filter(problem => {
-      const matchesLanguage =
-        !defaultLanguageId || (problem.language && problem.language.id === defaultLanguageId);
-
-      const matchesDifficulty =
-        !defaultDifficultyId || (problem.difficulty && problem.difficulty.id === defaultDifficultyId);
-
-      const matchesCategory =
-        !initialCategoryId || (problem.category && problem.category.id === initialCategoryId);
-      return matchesLanguage && matchesDifficulty && matchesCategory;
-
-    });
-    setFilteredProblems(filtered);
-
-    const filteredTheories = theories.filter(theory => {
-      const matchesLanguage =
-        !defaultLanguageId || (theory.language === defaultLanguageId);
-
-      const matchesCategory =
-        !initialCategoryId || (theory.category === initialCategoryId);
-      return matchesLanguage && matchesCategory;
-    });
-    filteredTheories.map(theory => {
-      if (theory.category === initialCategoryId) {
-        setSelectedTheory(theory);
-      }
-    })
-  }, [categories]);
+  const bgColor = useColorModeValue("gray.50", "gray.900");
+  const flexBgColor = useColorModeValue("white", "gray.800");
 
   if (loading) {
     return (
@@ -92,43 +75,44 @@ const Home: React.FC = () => {
   }
 
   return (
-    <Box bg={useColorModeValue("gray.50", "gray.900")} minH="100vh">
+    <Box bg={bgColor} minH="100vh">
       <Navbar />
+      <UserPreferences defaultLanguage={defaultLanguage} defaultDifficulty={defaultDifficulty} />
       <Flex
         direction="column"
         maxW="1200px"
         mx="auto"
         mt={6}
         p={6}
-        bg={useColorModeValue("white", "gray.800")}
+        bg={flexBgColor}
         borderRadius="md"
-        boxShadow="md"
-      >
-        <UserPreferences
-          defaultLanguage={defaultLanguage}
-          defaultDifficulty={defaultDifficulty}
-        />
+        boxShadow="md">
+
+        <SectionTab sections={sections} onSelectSection={(section) => {
+          setSelectedSection(section);
+        }} />
+
         <TabSelector
-          categories={categories.map((cat) => cat.name)}
+          categories={filteredCategories.map((cat) => cat.name)}
           selectedCategory={selectedCategory}
           onSelectCategory={(categoryName: string) => {
             setSelectedCategory(categoryName);
-            const selectedCat = categories.find((cat) => cat.name === categoryName);
-            const selectedTheory = theories.find((theory) => theory.category === selectedCat?.id && theory.language === defaultLanguageId);
+            const selectedCat = filteredCategories.find((cat) => cat.name === categoryName);
             setSelectedCategoryId(selectedCat ? selectedCat.id : "");
-            setSelectedTheory(selectedTheory ? selectedTheory : null);
           }}
         />
-        {selectedTheory && (
-          <TheoryField
-            theory={selectedTheory}
-          />
+
+        {filteredCategories.length > 0 && (
+          <>
+            {filteredTheories && filteredProblems && (
+              <ContentTabs selectedTheory={filteredTheories}
+                filteredProblems={filteredProblems}
+                defaultLanguage={defaultLanguage}
+                defaultLanguageVersion={defaultLanguageVersion} />
+            )}
+          </>
         )}
-        <QuestionList
-          problems={filteredProblems}
-          language={defaultLanguage}
-          version={defaultLanguageVersion}
-        />
+
       </Flex>
     </Box>
   );
