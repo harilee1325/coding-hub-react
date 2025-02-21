@@ -64,7 +64,7 @@ const TabSelector: React.FC<TabSelectorProps> = ({
                 />
                 <TabPanels>
                     {/* If you don't need content in the panels, you can leave them empty */}
-                    {categories.map((cat, i) => (
+                    {categories.map((i) => (
                         <TabPanel key={i} p={4}>
                             {/* Optionally, you could display something like "Showing {cat} problems" */}
                         </TabPanel>
